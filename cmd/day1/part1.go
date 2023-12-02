@@ -36,8 +36,9 @@ import (
 
 
 func get_number (line string) (int, error) {
+    if line == "" { return 0, nil }
     first, last := "", ""
-    
+
     for i, c := range line {
         if first == "" && c >= '0' && c <= '9' { 
             first = string(c)

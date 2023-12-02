@@ -38,6 +38,8 @@ var Digits = [...]string {
 
 
 func get_number (line string) (int, error) {
+    if line == "" { return 0, nil }
+
     first, last := "", ""
     
     for i, c := range line {
