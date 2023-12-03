@@ -16,6 +16,7 @@ import (
     "aoc2023/internal/util"
     "aoc2023/cmd/day1"
     "aoc2023/cmd/day2"
+    "aoc2023/cmd/day3"
 )
 
 
@@ -62,12 +63,9 @@ func main() {
     var challenge util.ChallengeDay
 
     switch day {
-        case 1:
-            challenge = day1.Day1
-        case 2:
-            challenge = day2.Day2
-        // case 3:
-        //     challenge = &day3.Day3{}
+        case 1: challenge = day1.Day1
+        case 2: challenge = day2.Day2
+        case 3: challenge = day3.Day3
     }
 
     if part == 1 {
