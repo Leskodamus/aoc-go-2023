@@ -24,13 +24,12 @@ The power of a set of cubes is equal to the numbers of red, green, and blue cube
 For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?
 */
 
-package main
+package day2
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
+    "aoc2023/internal/util"
 )
 
 
@@ -66,7 +65,7 @@ func (m *CubeColors) Power() int {
 }
 
 
-func get_power_of_sets (line string) int {
+func (p *Part2) get_power_of_sets (line string) int {
     var id int = 0
     colors := CubeColors{}.Init()
 
@@ -105,24 +104,16 @@ func get_power_of_sets (line string) int {
 }
 
 
-func main() {
-    if len (os.Args) != 2 {
-        fmt.Fprintln (os.Stderr, "Usage: ", os.Args[0]," <input file>")
-        os.Exit (1)
-    }
-
-    file, err := os.Open (os.Args[1])
-    if err != nil {
-        fmt.Println("Error reading input:", err)
-        os.Exit (1)
-    }
-    defer file.Close()
-
+func (p Part2) Run (input string) {
     sum := 0
-    input := bufio.NewScanner (file)
 
-    for input.Scan() {
-        sum += get_power_of_sets (input.Text())
+    buffer, err := util.ReadInput (input)
+    if err != nil {
+        util.ExitErr (1, err)
+    }
+
+    for buffer.Scan() {
+        sum += p.get_power_of_sets (buffer.Text())
     }
 
     fmt.Println ("Sum: ", sum)

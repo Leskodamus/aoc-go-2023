@@ -28,7 +28,6 @@ Consider your entire calibration document. What is the sum of all of the calibra
 package day1
 
 import (
-	"bufio"
 	"fmt"
 	"os"
     "strconv"
@@ -36,12 +35,15 @@ import (
 )
 
 
-type Day1 struct { 
-    util.Challenge 
+type Part1 struct { util.Part }
+type Part2 struct { util.Part }
+
+var Day1 util.ChallengeDay = util.ChallengeDay {
+    Part1: Part1{}, Part2: Part2{},
 }
 
 
-func get_number (line string) (int, error) {
+func (p *Part1) get_number (line string) (int, error) {
     if line == "" { return 0, nil }
     first, last := "", ""
 
@@ -67,24 +69,16 @@ func get_number (line string) (int, error) {
 }
 
 
-func (c *Day1) Part1(input string) {
-    if input == "" {
-        fmt.Println ("No input file specified.")
-        os.Exit (1)
-    }
-
-    file, err := os.Open (input)
-    if err != nil {
-        fmt.Println("Error reading input:", err)
-        os.Exit (1)
-    }
-    defer file.Close()
-
+func (p Part1) Run (input string) {
     sum := 0
-    buffer := bufio.NewScanner (file)
+
+    buffer, err := util.ReadInput (input)
+    if err != nil {
+        util.ExitErr (1, err)
+    }
 
     for buffer.Scan() {
-        number, err := get_number (buffer.Text())
+        number, err := p.get_number (buffer.Text())
         if err != nil {
             fmt.Println ("Error parsing number:", err)
             os.Exit (1)

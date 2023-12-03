@@ -15,14 +15,8 @@ import (
 	"os"
     "aoc2023/internal/util"
     "aoc2023/cmd/day1"
+    "aoc2023/cmd/day2"
 )
-
-
-func exit_err (err_code int, a ...any) {
-    fmt.Fprintln (os.Stderr, a...)
-    flag.Usage()
-    os.Exit(err_code)
-}
 
 
 func main() {
@@ -52,7 +46,7 @@ func main() {
     flag.Set ("input", flag.Arg(2))
 
     if !((day > 0 && day < 26) && (part == 1 || part == 2)) {
-        exit_err (1, "Invalid arguments: day", day, "part", part, "\n")
+        util.ExitErr (1, "Invalid arguments: day", day, "part", part, "\n")
     }
 
     if input == "" {
@@ -64,22 +58,22 @@ func main() {
         "Runnning challenge for day", day, "part", part, "\n" +
         "===========================\n",
     )
-
-    var challenge util.Challenge
+    
+    var challenge util.ChallengeDay
 
     switch day {
         case 1:
-            challenge = &day1.Day1{}
-        // case 2:
-        //     challenge = &day2.Day2{}
+            challenge = day1.Day1
+        case 2:
+            challenge = day2.Day2
         // case 3:
         //     challenge = &day3.Day3{}
     }
 
     if part == 1 {
-        challenge.Part1(input)
+        challenge.Part1.Run (input)
     } else if part == 2 {
-        challenge.Part2(input)
+        challenge.Part2.Run (input)
     }
 }
 

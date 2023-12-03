@@ -28,14 +28,21 @@ In the example above, games 1, 2, and 5 would have been possible if the bag had 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
 */
 
-package main
+package day2
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
+    "aoc2023/internal/util"
 )
+
+
+type Part1 struct { util.Part }
+type Part2 struct { util.Part }
+
+var Day2 util.ChallengeDay = util.ChallengeDay {
+    Part1: Part1{}, Part2: Part2{},
+}
 
 
 var BagMaxSizes = map[string]int {
@@ -46,7 +53,7 @@ var BagMaxSizes = map[string]int {
 }
 
 
-func get_id_if_possible (line string) int {
+func (p *Part1) get_id_if_possible (line string) int {
     var id int = 0
 
     if line == "" { return 0 }
@@ -88,24 +95,16 @@ func get_id_if_possible (line string) int {
 }
 
 
-func main() {
-    if len (os.Args) != 2 {
-        fmt.Fprintln (os.Stderr, "Usage: ", os.Args[0]," <input file>")
-        os.Exit (1)
-    }
-
-    file, err := os.Open (os.Args[1])
-    if err != nil {
-        fmt.Println("Error reading input:", err)
-        os.Exit (1)
-    }
-    defer file.Close()
-
+func (p Part1) Run (input string) {
     sum := 0
-    input := bufio.NewScanner (file)
 
-    for input.Scan() {
-        sum += get_id_if_possible (input.Text())
+    buffer, err := util.ReadInput (input)
+    if err != nil {
+        util.ExitErr (1, err)
+    }
+
+    for buffer.Scan() {
+        sum += p.get_id_if_possible (buffer.Text())
     }
 
     fmt.Println ("Sum: ", sum)
