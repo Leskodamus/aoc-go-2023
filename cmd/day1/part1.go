@@ -25,14 +25,20 @@ In this example, the calibration values of these four lines are 12, 38, 15, and 
 Consider your entire calibration document. What is the sum of all of the calibration values?
 */
 
-package main
+package day1
 
 import (
 	"bufio"
 	"fmt"
 	"os"
     "strconv"
+    "aoc2023/internal/util"
 )
+
+
+type Day1 struct { 
+    util.Challenge 
+}
 
 
 func get_number (line string) (int, error) {
@@ -61,13 +67,13 @@ func get_number (line string) (int, error) {
 }
 
 
-func main() {
-    if len (os.Args) != 2 {
-        fmt.Fprintln (os.Stderr, "Usage: ", os.Args[0]," <input file>")
+func (c *Day1) Part1(input string) {
+    if input == "" {
+        fmt.Println ("No input file specified.")
         os.Exit (1)
     }
 
-    file, err := os.Open (os.Args[1])
+    file, err := os.Open (input)
     if err != nil {
         fmt.Println("Error reading input:", err)
         os.Exit (1)
@@ -75,10 +81,10 @@ func main() {
     defer file.Close()
 
     sum := 0
-    input := bufio.NewScanner (file)
+    buffer := bufio.NewScanner (file)
 
-    for input.Scan() {
-        number, err := get_number (input.Text())
+    for buffer.Scan() {
+        number, err := get_number (buffer.Text())
         if err != nil {
             fmt.Println ("Error parsing number:", err)
             os.Exit (1)

@@ -20,7 +20,7 @@ In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Addi
 What is the sum of all of the calibration values?
 */
 
-package main
+package day1 
 
 import (
 	"bufio"
@@ -36,8 +36,7 @@ var Digits = [...]string {
     "six", "seven", "eight", "nine",
 }
 
-
-func get_number (line string) (int, error) {
+func get_number_by_names (line string) (int, error) {
     if line == "" { return 0, nil }
 
     first, last := "", ""
@@ -81,9 +80,9 @@ func get_number (line string) (int, error) {
 }
 
 
-func main() {
-    if len (os.Args) != 2 {
-        fmt.Fprintln (os.Stderr, "Usage: ", os.Args[0]," <input file>")
+func (c *Day1) Part2(input string) {
+    if input == "" {
+        fmt.Println ("No input file specified.")
         os.Exit (1)
     }
 
@@ -95,10 +94,10 @@ func main() {
     defer file.Close()
 
     sum := 0
-    input := bufio.NewScanner (file)
+    buffer := bufio.NewScanner (file)
 
-    for input.Scan() {
-        number, err := get_number (input.Text())
+    for buffer.Scan() {
+        number, err := get_number_by_names (buffer.Text())
         if err != nil {
             fmt.Println ("Error parsing number:", err)
             os.Exit (1)

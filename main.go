@@ -13,7 +13,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
+    "aoc2023/internal/util"
+    "aoc2023/cmd/day1"
 )
 
 
@@ -64,16 +65,21 @@ func main() {
         "===========================\n",
     )
 
-    // Run the challenge
-    challenge_exec := fmt.Sprintf ("./cmd/day%d/part%d.go", day, part)
+    var challenge util.Challenge
 
-    cmd := exec.Command ("go", "run", challenge_exec, input)
-
-    out, err := cmd.CombinedOutput()
-    if err != nil {
-        exit_err (1, "Error running challenge:", err)
+    switch day {
+        case 1:
+            challenge = &day1.Day1{}
+        // case 2:
+        //     challenge = &day2.Day2{}
+        // case 3:
+        //     challenge = &day3.Day3{}
     }
 
-    fmt.Println (string (out))
+    if part == 1 {
+        challenge.Part1(input)
+    } else if part == 2 {
+        challenge.Part2(input)
+    }
 }
 
