@@ -36,22 +36,85 @@ package day4
 import (
 	"aoc2023/internal/util"
 	"fmt"
+	"slices"
+	"strconv"
+	"strings"
 )
+
+
+type Cards struct {
+    winning []int
+    my_numbers []int
+    instances int
+}
+
+
+func initCards (winning []int, my_numbers []int) Cards {
+    return Cards {
+        winning: winning,
+        my_numbers: my_numbers,
+        instances: 1,
+    }
+}
+
+
+func (p *Part2) count_matching_numbers (cards *Cards) int {
+    count := 0
+    for _, n := range cards.my_numbers {
+        if slices.Contains (cards.winning, n) {
+            count++
+        }
+    }
+    return count
+}
+
+
+func (p *Part2) numbers_from_string (s string) []int {
+    var numbers []int
+    for _, s := range strings.Fields (s) {
+        n,_ := strconv.Atoi ((s))
+        numbers = append (numbers, n)
+    }
+    return numbers
+}
 
 
 func (p Part2) Run (input string) {
     sum := 0
+
     buffer, err := util.ReadInput (input)
     if err != nil {
         util.ExitErr (1, err)
     }
 
-    var schematic = [][]rune{}
+    var cards []Cards
 
-    for buffer.Scan() {
-        schematic = append (schematic, []rune (buffer.Text()))
+    for buffer.Scan () {
+        card := buffer.Text ()
+        numbers := strings.Split (card, ":")[1]
+
+        winning, my_numbers := func (s string) (string, string) {
+            parts := strings.Split (s, "|")
+            return parts[0], parts[1]
+        }(numbers)
+
+        cards = append (cards, initCards (p.numbers_from_string (winning),
+                p.numbers_from_string (my_numbers)))
     }
-   
+
+    for i, card := range cards {
+        count := p.count_matching_numbers (&card)
+
+        // Increment the number of instances of the nex count cards
+        for j := 0; j < count; j++ {
+            if i + j + 1 < len (cards) {
+                cards[i+j+1].instances += card.instances
+            }
+        }
+
+        sum += card.instances
+    }
+
     fmt.Println ("Sum:", sum)
 }
 
