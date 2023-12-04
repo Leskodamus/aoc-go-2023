@@ -17,6 +17,7 @@ import (
     "aoc2023/cmd/day1"
     "aoc2023/cmd/day2"
     "aoc2023/cmd/day3"
+    "aoc2023/cmd/day4"
 )
 
 
@@ -60,12 +61,13 @@ func main() {
         "===========================\n",
     )
     
-    var challenge util.ChallengeDay
+    var challenge util.Challenge
 
     switch day {
-        case 1: challenge = day1.Day1
-        case 2: challenge = day2.Day2
-        case 3: challenge = day3.Day3
+        case 1: challenge = day1.Challenge
+        case 2: challenge = day2.Challenge
+        case 3: challenge = day3.Challenge
+        case 4: challenge = day4.Challenge
     }
 
     if part == 1 {

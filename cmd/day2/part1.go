@@ -40,7 +40,7 @@ import (
 type Part1 struct { util.Part }
 type Part2 struct { util.Part }
 
-var Day2 util.ChallengeDay = util.ChallengeDay {
+var Challenge util.Challenge = util.Challenge {
     Part1: Part1{}, Part2: Part2{},
 }
 

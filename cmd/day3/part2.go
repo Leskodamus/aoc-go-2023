@@ -38,7 +38,7 @@ import (
 )
 
 
-func get_number (row []rune, i int) int {
+func (p *Part2) get_number (row []rune, i int) int {
     var number int = 0
 
     // Check digits to left
@@ -83,20 +83,20 @@ func (p Part2) Run (input string) {
                 // Check if digit is to the left
                 if j > 1 && unicode.IsDigit (schematic[i][j-1]) {
                     nAdjacent++
-                    numbers = append (numbers, get_number (schematic[i], j-1))
+                    numbers = append (numbers, p.get_number (schematic[i], j-1))
                 }
 
                 // Check if digit is to the right
                 if j < len (schematic[i])+1 && unicode.IsDigit (schematic[i][j+1]) {
                     nAdjacent++
-                    numbers = append (numbers, get_number (schematic[i], j+1))
+                    numbers = append (numbers, p.get_number (schematic[i], j+1))
                 } 
                 
                 // Check if digit is above
                 if i > 0 {
                     if unicode.IsDigit (schematic[i-1][j]) {
                         nAdjacent++
-                        numbers = append (numbers, get_number (schematic[i-1], j))
+                        numbers = append (numbers, p.get_number (schematic[i-1], j))
                     } else {
                         // Only need to check left and right if there is no digit 
                         // directly above the asterisk
@@ -104,14 +104,14 @@ func (p Part2) Run (input string) {
                         // Check diagonals above left
                         if j > 0 && unicode.IsDigit (schematic[i-1][j-1]) {
                             nAdjacent++
-                            numbers = append (numbers, get_number (schematic[i-1], j-1))
+                            numbers = append (numbers, p.get_number (schematic[i-1], j-1))
                         } 
 
                         // Check diagonals above right
                         if j < len (schematic[i-1]) - 1 && 
                                 unicode.IsDigit (schematic[i-1][j+1]) {
                             nAdjacent++
-                            numbers = append (numbers, get_number (schematic[i-1], j+1))
+                            numbers = append (numbers, p.get_number (schematic[i-1], j+1))
                         }
                     }
                 }
@@ -120,19 +120,19 @@ func (p Part2) Run (input string) {
                 if i < len (schematic) - 1 {
                     if unicode.IsDigit (schematic[i+1][j]) {
                         nAdjacent++
-                        numbers = append (numbers, get_number (schematic[i+1], j))
+                        numbers = append (numbers, p.get_number (schematic[i+1], j))
                     } else {
                         // Check diagonals below left
                         if j > 0 && unicode.IsDigit (schematic[i+1][j-1]) {
                             nAdjacent++
-                            numbers = append (numbers, get_number (schematic[i+1], j-1))
+                            numbers = append (numbers, p.get_number (schematic[i+1], j-1))
                         }
 
                         // Check diagonals below right
                         if j < len (schematic[i+1]) - 1 && 
                                 unicode.IsDigit (schematic[i+1][j+1]) {
                             nAdjacent++
-                            numbers = append (numbers, get_number (schematic[i+1], j+1))
+                            numbers = append (numbers, p.get_number (schematic[i+1], j+1))
                         }
                     }
                 }

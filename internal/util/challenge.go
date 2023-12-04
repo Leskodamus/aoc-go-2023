@@ -16,7 +16,7 @@ type Part interface {
 type Part1 struct { Part }
 type Part2 struct { Part }
 
-type ChallengeDay struct {
+type Challenge struct {
     Part1 Part
     Part2 Part
 }
