@@ -34,9 +34,9 @@ Of course, the actual engine schematic is much larger. What is the sum of all of
 package day3
 
 import (
-	"aoc2023/internal/util"
 	"fmt"
 	"unicode"
+	"aoc2023/internal/util"
 )
 
 
@@ -45,11 +45,6 @@ type Part2 struct { util.Part }
 
 var Day3 util.ChallengeDay = util.ChallengeDay {
     Part1: Part1{}, Part2: Part2{},
-}
-
-
-func (p *Part1) has_adjacent_symbol () bool {
-    return true 
 }
 
 
