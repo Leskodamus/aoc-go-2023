@@ -18,6 +18,7 @@ import (
     "aoc2023/cmd/day2"
     "aoc2023/cmd/day3"
     "aoc2023/cmd/day4"
+    "aoc2023/cmd/day5"
 )
 
 
@@ -68,6 +69,7 @@ func main() {
         case 2: challenge = day2.Challenge
         case 3: challenge = day3.Challenge
         case 4: challenge = day4.Challenge
+        case 5: challenge = day5.Challenge
     }
 
     if part == 1 {
