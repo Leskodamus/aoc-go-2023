@@ -87,8 +87,8 @@ func (p Part1) Run (input string) {
     buffer.Scan()
     distances_line := buffer.Text()
 
-    times := p.str_fields_to_ints (strings.Fields (strings.TrimSpace (strings.TrimPrefix (times_line, "Time: "))))
-    distances := p.str_fields_to_ints (strings.Fields (strings.TrimSpace (strings.TrimPrefix (distances_line, "Distance: "))))
+    times := p.str_fields_to_ints (strings.Fields (strings.TrimPrefix (times_line, "Time: ")))
+    distances := p.str_fields_to_ints (strings.Fields (strings.TrimPrefix (distances_line, "Distance: ")))
 
     for i, time := range times {
         nways := 0

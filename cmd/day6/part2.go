@@ -22,14 +22,36 @@ package day6
 
 import (
 	"aoc2023/internal/util"
+	"fmt"
+	"strconv"
+	"strings"
 )
 
 
 func (p Part2) Run (input string) {
+    sum := 1
+
     buffer, err := util.ReadInput (input)
     if err != nil {
         util.ExitErr (1, err)
     }
-    for buffer.Scan() {}
+
+    buffer.Scan()
+    times_line := buffer.Text()
+
+    buffer.Scan()
+    distances_line := buffer.Text()
+
+    record_time, _ := strconv.Atoi (strings.Replace (strings.TrimPrefix (times_line, "Time: "), " ", "", -1))
+    record_distance, _ := strconv.Atoi (strings.Replace (strings.TrimPrefix (distances_line, "Distance: "), " ", "", -1))
+
+    nways := 0
+    for j := 0; j < record_time; j++ {
+        distance := j * (record_time - j)
+        if distance > record_distance { nways += 1 }
+    }
+    sum *= nways
+
+    fmt.Println ("Sum: ", sum)
 }
 
