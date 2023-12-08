@@ -86,43 +86,31 @@ func (p Part2) Run (input string) {
     var cycles []int
 
     for _, node := range starting_nodes {
-        var cycle []int
-        var i int = 0
-        var first_z *string = nil
+        var i, cycle int = 0, 0
+        var first_z string
 
         for {
-            var step_count int = 0
-
-            for step_count == 0 || !strings.HasSuffix (node, "Z") {
-                step_count++
-
+            for !strings.HasSuffix (node, "Z") {
                 if instructions[i] == 'L' {
                     node = nodes[node][0]
                 } else if (instructions[i] == 'R') {
                     node = nodes[node][1]
                 }
 
-                i++
-                i %= len (instructions)
+                i = (i+1) % len (instructions)
+                cycle++
             }
-            
-            cycle = append (cycle, step_count)
 
-            if first_z == nil {
-                first_z = &node
-            } else if node == *first_z {
-                break
-            } 
+            if first_z == "" {
+                first_z = node
+            } else if node == first_z { break } 
         }
-    
-        cycles = append(cycles, cycle...)
+
+        cycles = append(cycles, cycle)
     }
 
     steps := cycles[0]
-
-    // Cycles are appended twice, because only then we know it is a cycle.
-    // Therefore skip every second entry.
-    for i := 0; i < len (cycles); i += 2 {
+    for i := 0; i < len (cycles); i++ {
         steps = (steps * cycles[i]) / p.gcd (steps, cycles[i])
     }
 
