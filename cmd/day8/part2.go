@@ -87,9 +87,10 @@ func (p Part2) Run (input string) {
 
     for _, node := range starting_nodes {
         var i, cycle int = 0, 0
-        var first_z string
+        var first_z_node string
 
         for {
+            // Find node ending with Z
             for !strings.HasSuffix (node, "Z") {
                 if instructions[i] == 'L' {
                     node = nodes[node][0]
@@ -101,9 +102,9 @@ func (p Part2) Run (input string) {
                 cycle++
             }
 
-            if first_z == "" {
-                first_z = node
-            } else if node == first_z { break } 
+            if first_z_node == "" {
+                first_z_node = node
+            } else if node == first_z_node { break }
         }
 
         cycles = append(cycles, cycle)
