@@ -101,7 +101,6 @@ type Hand struct {
     cards []rune
     bid int
     hand_type HandType
-    strength int
 }
 
 
@@ -110,7 +109,6 @@ func NewHand (cards []rune, bid int) Hand {
     hand.cards = cards
     hand.bid = bid
     hand.hand_type= hand.get_hand_type()
-    hand.strength = hand.get_cards_strength()
     return hand
 }
 
@@ -147,15 +145,6 @@ func (h *Hand) get_hand_type () HandType {
     }
 
     return hand_type
-}
-
-
-func (h *Hand) get_cards_strength () int {
-    var strength int = 0
-    for i, card := range h.cards {
-        strength += CardStrength[card] * (len (h.cards) - i)
-    }
-    return strength
 }
 
 
