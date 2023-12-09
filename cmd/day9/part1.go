@@ -109,7 +109,6 @@ func (p Part1) Run (input string) {
     }
 
     var initial_signals [][]int
-    var extrapolate_signals [][][]int
 
     for buffer.Scan () {
         line := buffer.Text ()
@@ -118,45 +117,17 @@ func (p Part1) Run (input string) {
     }
 
     for _, initial := range initial_signals {
-        sequences := [][]int { initial }
-        
-        for i := 0; i < len (sequences); i++ {
-            // Generate sequence for initial signal
-            var sequence []int
+        for s := initial; !p.arr_is_all_zeroes (s); {
+            sequence := []int {}
 
-            for j := 1; j < len (sequences[i]); j++ {
-                diff := sequences[i][j] - sequences[i][j-1]
+            for j := 1; j < len (s); j++ {
+                diff := s[j] - s[j-1]
                 sequence = append (sequence, diff)
             }
 
-            sequences = append (sequences, sequence)
-
-            if p.arr_is_all_zeroes (sequence) {
-                sequences[i+1] = append (sequences[i+1], 0)
-                break
-            }
+            sum += s[len (s) - 1]
+            s = sequence
         }
-        extrapolate_signals = append (extrapolate_signals, sequences)
-    }
-
-    // For each list of sequences
-    for s := 0; s < len (extrapolate_signals); s++ {
-        // For each sequence in list, starting from bottom
-        for i := len (extrapolate_signals[s]) - 1; i > 0; i-- {
-            curr_idx_last_value := len (extrapolate_signals[s][i]) - 1
-            prev_idx_last_value := len (extrapolate_signals[s][i-1]) - 1
-
-            value := extrapolate_signals[s][i][curr_idx_last_value] + 
-                    extrapolate_signals[s][i-1][prev_idx_last_value]
-
-            // Insert calculated value at the end of the previous sequence
-            extrapolate_signals[s][i-1] = append (extrapolate_signals[s][i-1], value)
-        }
-    }
-
-    // Calculate sum
-    for _, extrapolate := range extrapolate_signals {
-        sum += extrapolate[0][len (extrapolate[0]) - 1]
     }
 
     fmt.Println ("Sum:", sum)

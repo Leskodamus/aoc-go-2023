@@ -25,6 +25,7 @@ package day9
 import (
 	"aoc2023/internal/util"
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -40,51 +41,26 @@ func (p Part2) Run (input string) {
     }
 
     var initial_signals [][]int
-    var extrapolate_signals [][][]int
 
     for buffer.Scan () {
         line := buffer.Text ()
         history := util.StrFieldsToInts (strings.Fields (line))
+        slices.Reverse (history)
         initial_signals = append (initial_signals, history)
     }
 
     for _, initial := range initial_signals {
-        sequences := [][]int { initial }
-        
-        for i := 0; i < len (sequences) ; i++ {
-            // Generate sequence for initial signal
-            var sequence []int
+        for s := initial; !part1.arr_is_all_zeroes (s); {
+            sequence := []int {}
 
-            for j := 1; j < len (sequences[i]); j++ {
-                diff := sequences[i][j] - sequences[i][j-1]
+            for j := 1; j < len (s); j++ {
+                diff := s[j] - s[j-1]
                 sequence = append (sequence, diff)
             }
 
-            sequences = append (sequences, sequence)
-
-            if part1.arr_is_all_zeroes (sequence) {
-                sequences[i+1] = append ([]int {0}, sequences[i+1]...)
-                break
-            }
+            sum += s[len (s) - 1]
+            s = sequence
         }
-        extrapolate_signals = append (extrapolate_signals, sequences)
-    }
-
-    // For each list of sequences
-    for s := 0; s < len (extrapolate_signals); s++ {
-        // For each sequence in list, starting from bottom
-        for i := len (extrapolate_signals[s]) - 1; i > 0; i-- {
-            value := extrapolate_signals[s][i-1][0] -
-                    extrapolate_signals[s][i][0]
-
-            // Insert calculated value at the beginning of the sequence
-            extrapolate_signals[s][i-1] = append ([]int{value}, extrapolate_signals[s][i-1]...)
-        }
-    }
-
-    // Calculate sum
-    for _, extrapolate := range extrapolate_signals {
-        sum += extrapolate[0][0]
     }
 
     fmt.Println ("Sum:", sum)
