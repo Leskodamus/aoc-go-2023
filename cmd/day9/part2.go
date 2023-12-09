@@ -51,7 +51,7 @@ func (p Part2) Run (input string) {
     for _, initial := range initial_signals {
         sequences := [][]int { initial }
         
-        for i := 0; ; i++ {
+        for i := 0; i < len (sequences) ; i++ {
             // Generate sequence for initial signal
             var sequence []int
 
