@@ -98,7 +98,7 @@ type Record struct {
 }
 
 
-func count_arrangements (conditions string, re []*regexp.Regexp) int {
+func (p *Part1) count_arrangements (conditions string, re []*regexp.Regexp) int {
 	if len (re) == 0 {
 		if strings.Contains (conditions, "#") {
 			return 0
@@ -114,7 +114,7 @@ func count_arrangements (conditions string, re []*regexp.Regexp) int {
 		if loc == nil || strings.Contains (conditions[:index+loc[0]], "#") {
 			break
 		}
-		matches += count_arrangements (conditions[index+loc[1]-1:], re[1:])
+		matches += p.count_arrangements (conditions[index+loc[1]-1:], re[1:])
 		index += loc[0] + 1
 	}
 
@@ -145,9 +145,8 @@ func (p Part1) Run (input string) {
         re := []*regexp.Regexp{}
         for _, g := range record.group {
             re = append (re, regexp.MustCompile (fmt.Sprintf ("[.?][#?]{%d}[.?]", g)))
-            fmt.Println (re[len (re)-1])
         }
-        sum += count_arrangements (fmt.Sprintf (".%s.", record.conditions), re)
+        sum += p.count_arrangements (fmt.Sprintf (".%s.", record.conditions), re)
     }
 
     fmt.Println (sum)
