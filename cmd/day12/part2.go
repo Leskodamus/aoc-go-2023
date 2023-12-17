@@ -36,12 +36,43 @@ package day12
 import (
 	"aoc2023/internal/util"
 	"fmt"
-	"regexp"
+	"slices"
 	"strings"
 )
 
 
 var part1 Part1
+
+
+func (p *Part2) is_valid (conditions string, groups []int) bool {
+    condition_parts := strings.Split (conditions, ".")
+    count_spring_parts := []int{}
+
+    for _, part := range condition_parts {
+        c := strings.Count (part, "#")
+        if c == 0 { continue }
+        count_spring_parts = append (count_spring_parts, c)
+    }
+
+    return slices.Equal (count_spring_parts, groups)
+}
+
+
+func (p *Part2) count_arrangements (conditions string, groups []int) int {
+    if !strings.Contains (conditions, "?") {
+        if p.is_valid (conditions, groups) {
+            return 1
+        }
+        return 0
+    }
+
+    i := strings.Index (conditions, "?")
+    count := 0
+    count += p.count_arrangements (conditions[:i] + "#" + conditions[i+1:], groups)
+    count += p.count_arrangements (conditions[:i] + "." + conditions[i+1:], groups)
+
+    return count
+}
 
 
 func (p Part2) Run (input string) {
@@ -66,18 +97,7 @@ func (p Part2) Run (input string) {
     for _, record := range records {
         conditions := record.conditions
         group := record.group
-        for i := 0; i < 4; i++ {
-            record.conditions = fmt.Sprintf ("%s?%s", record.conditions, conditions)
-            record.group = append (record.group, group...)
-        }
-
-        re := []*regexp.Regexp{}
-        for _, g := range record.group {
-            re_str := fmt.Sprintf ("[.?][#?]{%d}[.?]", g)
-            re = append (re, regexp.MustCompile (re_str))
-        }
-
-        sum += part1.count_arrangements (fmt.Sprintf (".%s.", record.conditions), re)
+        sum += p.count_arrangements (conditions, group)
     }
 
     fmt.Println (sum)
