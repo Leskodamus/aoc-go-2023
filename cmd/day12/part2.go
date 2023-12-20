@@ -36,40 +36,57 @@ package day12
 import (
 	"aoc2023/internal/util"
 	"fmt"
-	"slices"
 	"strings"
 )
 
 
-var part1 Part1
-
-
-func (p *Part2) is_valid (conditions string, groups []int) bool {
-    condition_parts := strings.Split (conditions, ".")
-    count_spring_parts := []int{}
-
-    for _, part := range condition_parts {
-        c := strings.Count (part, "#")
-        if c == 0 { continue }
-        count_spring_parts = append (count_spring_parts, c)
-    }
-
-    return slices.Equal (count_spring_parts, groups)
+type cacheKey struct {
+    conditions string
+    groups     string   // This is a string because slices are not comparable.
+    groupLoc   int
 }
 
+var cache = make (map[cacheKey]int)
 
-func (p *Part2) count_arrangements (conditions string, groups []int) int {
-    if !strings.Contains (conditions, "?") {
-        if p.is_valid (conditions, groups) {
+
+func (p *Part2) count_arrangements (conditions string, groups []int, group_loc int) int {
+    key := cacheKey{ conditions, util.IntSlicetoString(groups, ","), group_loc }
+
+    if val, ok := cache[key]; ok {
+        return val
+    }
+
+    if len (conditions) == 0 {
+        if len (groups) == 0 && group_loc == 0 {
+            cache[key] = 1
             return 1
         }
+        cache[key] = 0
         return 0
     }
 
-    i := strings.Index (conditions, "?")
     count := 0
-    count += p.count_arrangements (conditions[:i] + "#" + conditions[i+1:], groups)
-    count += p.count_arrangements (conditions[:i] + "." + conditions[i+1:], groups)
+
+    possibilities := []rune{rune (conditions[0])}
+    if conditions[0] == '?' {
+        possibilities = []rune{ '.', '#' }
+    }
+
+    for _, pos := range possibilities {
+        if pos == '#' {
+            count += p.count_arrangements (conditions[1:], groups, group_loc + 1)
+        } else {
+            if group_loc > 0 {
+                if len (groups) > 0 && groups[0] == group_loc {
+                    count += p.count_arrangements (conditions[1:], groups[1:], 0)
+                }
+            } else {
+                count += p.count_arrangements (conditions[1:], groups, 0)
+            }
+        }
+    }
+
+    cache[key] = count
 
     return count
 }
@@ -83,21 +100,24 @@ func (p Part2) Run (input string) {
         util.ExitErr (1, err)
     }
 
-    records := []Record{}
-
     for buffer.Scan () {
         line := buffer.Text ()
         parts := strings.Split (line, " ")
-        records = append (records, Record {
-            conditions: parts[0],
-            group: util.StrFieldsToInts (strings.Split (parts[1], ",")),
-        })
-    }
+        
+        conditions, group := func() (string, []int) {
+            original_parts := parts[0]
+            original_groups := parts[1]
 
-    for _, record := range records {
-        conditions := record.conditions
-        group := record.group
-        sum += p.count_arrangements (conditions, group)
+            for i := 0; i < 4; i++ {
+                parts[0] += "?" + original_parts
+                parts[1] += "," + original_groups
+            }
+            // Dot is appended to the conditions to allow iterating up to the last symbol.
+            // This symbol could be anything, even just a space.
+            return parts[0] + ".", util.StrFieldsToInts(strings.Split (parts[1], ","))
+        }()
+
+        sum += p.count_arrangements (conditions, group, 0)
     }
 
     fmt.Println (sum)

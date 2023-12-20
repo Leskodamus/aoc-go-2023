@@ -16,5 +16,5 @@ Using Golang for the first time ever.
 - [X] Day 9
 - [X] Day 10
 - [X] Day 11
-- [ ] Day 12
+- [X] Day 12
 
