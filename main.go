@@ -26,6 +26,7 @@ import (
     "aoc2023/cmd/day10"
     "aoc2023/cmd/day11"
     "aoc2023/cmd/day12"
+    "aoc2023/cmd/day13"
 )
 
 
@@ -84,6 +85,11 @@ func main() {
         case 10: challenge = day10.Challenge
         case 11: challenge = day11.Challenge
         case 12: challenge = day12.Challenge
+        case 13: challenge = day13.Challenge
+    }
+
+    if challenge == (util.Challenge{}) {
+        util.ExitErr (1, "Challenge not implemented for day", day, "\n")
     }
 
     if part == 1 {
