@@ -22,3 +22,19 @@ func IntSlicetoString (ints []int, separator string) string {
     return strings.TrimSuffix (str, separator)
 }
 
+func RunesOfRunesSliceToString (runes [][]rune) string {
+	str := ""
+	for _, row := range runes {
+		str += string (row) + "\n"
+	}
+	return str
+}
+
+func StrToRunesOfRunesSlice (str string) [][]rune {
+	rows := strings.Split (str, "\n")
+	runes := make([][]rune, len(rows))
+	for i, row := range rows {
+		runes[i] = []rune(row)
+	}
+	return runes
+}
